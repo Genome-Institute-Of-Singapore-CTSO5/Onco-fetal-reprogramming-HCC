@@ -1,5 +1,4 @@
 #-------------------------NICHENET-----------------------###
-setwd('/Users/justineseowjiawen/Dropbox/Liver_Paper/Github/')
 load('hepa-endo_NicheNet.RData')
 
 library(nichenetr)
