@@ -1,4 +1,3 @@
-setwd('/Users/justineseowjiawen/Dropbox/Liver_Paper/controlmouse/Scenic/')
 library(corrplot)
 library(stringr)
 library(RColorBrewer)
@@ -11,7 +10,7 @@ ll <- sapply(rownames(CMM) ,function(x) {str_split(x , '[_ ]')[[1]][1]})
 rn = as.data.frame(rownames(CMM),ll)
 rn['short']<- ll
 
-df <- read.csv('/Users/justineseowjiawen/Dropbox/Liver_Paper/controlmouse_garnett/data/HMD_HumanPhenotype.rpt.txt', sep = '\t', header = FALSE)
+df <- read.csv('./data/HMD_HumanPhenotype.rpt.txt', sep = '\t', header = FALSE)
 df <- df[,c(1,5)]
 colnames(df) <- c('human','mouse')
 head(df)
@@ -187,93 +186,3 @@ pdf('CTcorrplttest.pdf', height = 50, width = 50)
 p <- pheatmap(downsam, annotation_colors = my_colour, annotation_col = cellInfo, 
               annotation_row = cellInfo, show_rownames=F, show_colnames=F)
 dev.off()
-
-ch1 <- cellInfo[cellInfo$tree == 1, ]
-ch1$Species <- as.character(ch1$Species)
-ch1$CellType <- as.character(ch1$CellType)
-ch1['mix'] <- paste(ch1$Species, ch1$CellType, sep="_")
-table(ch1$mix)
-
-ch2 <- cellInfo[cellInfo$tree == 2, c('Species','CellType')]
-ch2$Species <- as.character(ch2$Species)
-ch2$CellType <- as.character(ch2$CellType)
-ch2['mix'] <- paste(ch2$Species, ch2$CellType, sep="_")
-table(ch2$mix)
-
-ch3 <- cellInfo[cellInfo$tree == 3, ]
-ch3$Species <- as.character(ch3$Species)
-ch3$CellType <- as.character(ch3$CellType)
-ch3['mix'] <- paste(ch3$Species, ch3$CellType, sep="_")
-table(ch3$mix)
-
-ch4 <- cellInfo[cellInfo$tree == 4, ]
-ch4$Species <- as.character(ch4$Species)
-ch4$CellType <- as.character(ch4$CellType)
-ch4['mix'] <- paste(ch4$Species, ch4$CellType, sep="_")
-table(ch4$mix)
-
-#rm(ch3,ch4)
-
-Tam1_tomneg <- as.data.frame(
-  downsam[rownames(downsam) %in% rownames(ch3[ch3$mix == 'human_TAM1',]),
-          colnames(downsam) %in% rownames(ch3[ch3$mix == 'mouse_Tomneg_Mac',])])
-Tam1_tomneg_val <- sum(apply(Tam1_tomneg, 1, function(x) sum(x>0.2)))
-
-
-Tam2_tomneg <- as.data.frame(
-  downsam[rownames(downsam) %in% rownames(ch3[ch3$mix == 'human_TAM2',]),
-          colnames(downsam) %in% rownames(ch3[ch3$mix == 'mouse_Tomneg_Mac',])])
-Tam2_tomneg_val <- sum(apply(Tam2_tomneg, 1, function(x) sum(x>0.2)))
-
-
-Tam3_tomneg <- as.data.frame(
-  downsam[rownames(downsam) %in% rownames(ch3[ch3$mix == 'human_TAM3',]),
-          colnames(downsam) %in% rownames(ch3[ch3$mix == 'mouse_Tomneg_Mac',])])
-Tam3_tomneg_val <- sum(apply(Tam3_tomneg, 1, function(x) sum(x>0.2)))
-
-flm_tomneg <- as.data.frame(
-  downsam[rownames(downsam) %in% rownames(ch3[ch3$mix == 'human_FLM',]),
-          colnames(downsam) %in% rownames(ch3[ch3$mix == 'mouse_Tomneg_Mac',])])
-flm_tomneg_val <- sum(apply(flm_tomneg, 1, function(x) sum(x>0.2)))
-
-
-Tam1_tompos <- as.data.frame(
-  downsam[rownames(downsam) %in% rownames(ch3[ch3$mix == 'human_TAM1',]),
-          colnames(downsam) %in% rownames(ch3[ch3$mix == 'mouse_Tompos_Mac',])])
-Tam1_tompos_val <- sum(apply(Tam1_tompos, 1, function(x) sum(x>0.2)))
-
-
-Tam2_tompos <- as.data.frame(
-  downsam[rownames(downsam) %in% rownames(ch3[ch3$mix == 'human_TAM2',]),
-          colnames(downsam) %in% rownames(ch3[ch3$mix == 'mouse_Tompos_Mac',])])
-Tam2_tompos_val <- sum(apply(Tam2_tompos, 1, function(x) sum(x>0.2)))
-
-
-Tam3_tompos <- as.data.frame(
-  downsam[rownames(downsam) %in% rownames(ch3[ch3$mix == 'human_TAM3',]),
-          colnames(downsam) %in% rownames(ch3[ch3$mix == 'mouse_Tompos_Mac',])])
-Tam3_tompos_val <- sum(apply(Tam3_tompos, 1, function(x) sum(x>0.2)))
-
-
-flm_tompos <- as.data.frame(
-  downsam[rownames(downsam) %in% rownames(ch3[ch3$mix == 'human_FLM',]),
-          colnames(downsam) %in% rownames(ch3[ch3$mix == 'mouse_Tompos_Mac',])])
-flm_tompos_val <- sum(apply(flm_tompos, 1, function(x) sum(x>0.2)))
-
-rm(Tam1_tomneg,Tam2_tomneg,Tam3_tomneg,flm_tomneg,
-   Tam1_tompos,Tam2_tompos,Tam3_tompos,flm_tompos)
-
-getwd()
-library(circlize)
-val<-read.csv('CTinteraction_val.csv', check.names=FALSE, header = TRUE)
-head(val)
-
-Ncol = c(Tompos_Mac = '#e377c2', Tomneg_Mac = '#279e68', FLM = '#7d010f',
-         TAM1 = '#d62728', TAM3 = '#8c564b', TAM2 = '#aa40fc')
-
-chordDiagram(val, grid.col = Ncol, transparency = 0.5, annotationTrack = "grid", 
-             preAllocateTracks = list(0.06)) 
-circos.track(track.index = 1, panel.fun = function(x, y) {
-  circos.text(CELL_META$xcenter, CELL_META$ylim[1], CELL_META$sector.index, 
-              facing = "clockwise", niceFacing = TRUE, adj = c(0, 0.5))
-}, bg.border = NA)
