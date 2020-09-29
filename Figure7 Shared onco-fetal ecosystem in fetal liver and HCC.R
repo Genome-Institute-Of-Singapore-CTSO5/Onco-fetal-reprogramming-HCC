@@ -1,4 +1,4 @@
-setwd('/Users/justineseowjiawen/Dropbox/Liver_Paper/nanostring/')
+setwd('/nanostring/')
 
 library(pheatmap)
 library(ggbiplot)
